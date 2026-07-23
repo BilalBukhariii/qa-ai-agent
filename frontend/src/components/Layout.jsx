@@ -12,7 +12,8 @@ import {
   Sun,
   Moon,
   LogOut,
-  ShieldCheck
+  ShieldCheck,
+  Settings
 } from "lucide-react";
 
 const links = [
@@ -23,6 +24,7 @@ const links = [
   { to: "/automation-agent", label: "Automation Agent", icon: Cpu },
   { to: "/database-agent", label: "DB Query Agent", icon: Database },
   { to: "/ai-chat", label: "AI Copilot Chat", icon: MessageSquare },
+  { to: "/settings", label: "AI Settings", icon: Settings },
 ];
 
 export default function Layout({ children }) {

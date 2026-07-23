@@ -7,6 +7,7 @@ import {
   generateApiTests,
   chatWithAI,
   generateBugReport,
+  getAIHistory,
 } from "../controllers/aiController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -19,5 +20,6 @@ router.post("/generate-database", protect, generateDatabaseQueries);
 router.post("/generate-api-tests", protect, generateApiTests);
 router.post("/chat", protect, chatWithAI);
 router.post("/generate-bug", protect, generateBugReport);
+router.get("/history", protect, getAIHistory);
 
 export default router;

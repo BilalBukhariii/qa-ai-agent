@@ -69,6 +69,7 @@ export default function RequirementAnalyzer() {
   const [executionLogs, setExecutionLogs] = useState([]);
   const [executionRunning, setExecutionRunning] = useState(false);
   const [execStats, setExecStats] = useState({ passed: 0, failed: 0, skipped: 0, total: 0 });
+  const [activeProvider, setActiveProvider] = useState(null); // which AI provider responded
 
   // ─── UI State ────────────────────────────────────────────────────────────────
   const [loading, setLoading] = useState(false);
@@ -179,8 +180,10 @@ export default function RequirementAnalyzer() {
     try {
       const { data } = await api.post("/ai/analyze-requirement", { requirement: requirement || "(See uploaded files)" });
       setAnalysis(data);
+      setActiveProvider(data._providerUsed || "fallback");
       setStep(2);
-      toast("✅ Requirement analysis complete!", "success");
+      const providerLabel = { openai: "OpenAI ChatGPT", gemini: "Gemini Free AI", openrouter: "OpenRouter Free AI", ollama: "Ollama Local AI", fallback: "Smart Rule Engine" }[data._providerUsed] || "AI Engine";
+      toast(`✅ Analysis complete — Using ${providerLabel}`, "success");
     } catch (err) {
       setError(err.response?.data?.message || "Analysis failed. Please try again.");
       toast("Analysis failed", "error");
@@ -205,10 +208,13 @@ export default function RequirementAnalyzer() {
       const { data } = await api.post("/ai/generate-testcases", {
         requirement,
         testTypes: testType === "manual" ? ["functional", "boundary", "negative", "UI"]
-          : testType === "automated" ? ["functional", "regression", "API", "E2E"]
-          : ["functional", "boundary", "negative", "UI", "regression", "API", "E2E"],
+          : testType === "automated" ? ["functional", "regression", "API", "E2E", "smoke"]
+          : ["functional", "boundary", "negative", "UI", "regression", "API", "E2E", "smoke", "security", "database"],
       });
-      const enriched = data.map((tc, i) => ({
+      // Handle both old (array) and new ({testCases, _providerUsed}) response shapes
+      const tcArray = Array.isArray(data) ? data : (data.testCases || []);
+      if (data._providerUsed) setActiveProvider(data._providerUsed);
+      const enriched = tcArray.map((tc, i) => ({
         id: `TC-${String(i + 1).padStart(3, "0")}`,
         reqId: "REQ-001",
         module: tc.module || "General",
@@ -445,7 +451,19 @@ export default function RequirementAnalyzer() {
             End-to-end AI QA automation — from requirements to reports
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
+          {activeProvider && (
+            <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-bold ${
+              activeProvider === "openai" ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300" :
+              activeProvider === "gemini" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" :
+              activeProvider === "openrouter" ? "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300" :
+              activeProvider === "ollama" ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300" :
+              "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+            }`}>
+              <Zap className="w-3 h-3" />
+              {{openai:"🤖 OpenAI ChatGPT", gemini:"✨ Gemini Free AI", openrouter:"🔀 OpenRouter Free AI", ollama:"🦙 Ollama Local AI", fallback:"⚙️ Smart Rule Engine"}[activeProvider] || "AI Engine"}
+            </span>
+          )}
           {autoSaved && (
             <span className="text-xs text-emerald-500 font-medium flex items-center gap-1">
               <Check className="w-3.5 h-3.5" /> Auto-saved

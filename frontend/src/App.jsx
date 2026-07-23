@@ -8,6 +8,7 @@ import AutomationAgent from "./pages/AutomationAgent.jsx";
 import DatabaseAgent from "./pages/DatabaseAgent.jsx";
 import AIChatPanel from "./pages/AIChatPanel.jsx";
 import Signup from "./pages/Signup.jsx";
+import Settings from "./pages/Settings.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 
 function PrivateRoute({ children }) {
@@ -73,6 +74,14 @@ export default function App() {
         element={
           <PrivateRoute>
             <TestCaseGenerator />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <PrivateRoute>
+            <Settings />
           </PrivateRoute>
         }
       />
