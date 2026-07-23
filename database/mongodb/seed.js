@@ -19,11 +19,13 @@ const run = async () => {
     await mongoose.connect(mongoServer.getUri(), { dbName: "qa_ai_agent" });
   }
 
-  const admin = await User.findOneAndUpdate(
-    { email: "admin@example.com" },
-    { name: "Admin", email: "admin@example.com", password: "Passw0rd!", role: "admin" },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
-  );
+  await User.deleteMany({ email: "admin@example.com" });
+  const admin = await User.create({
+    name: "Admin",
+    email: "admin@example.com",
+    password: "Passw0rd!",
+    role: "admin",
+  });
 
   const ticket = await Ticket.create({
     title: "User cannot reset password",
