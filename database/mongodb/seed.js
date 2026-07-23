@@ -19,11 +19,18 @@ const run = async () => {
     await mongoose.connect(mongoServer.getUri(), { dbName: "qa_ai_agent" });
   }
 
-  await User.deleteMany({ email: "admin@example.com" });
+  await User.deleteMany({ email: { $in: ["admin@example.com", "bilal.admin@gmail.com"] } });
   const admin = await User.create({
     name: "Admin",
     email: "admin@example.com",
     password: "Passw0rd!",
+    role: "admin",
+  });
+
+  await User.create({
+    name: "Bilal Admin",
+    email: "bilal.admin@gmail.com",
+    password: "bilal12345",
     role: "admin",
   });
 

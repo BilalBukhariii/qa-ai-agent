@@ -21,8 +21,15 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const register = async (name, email, password, role = "viewer") => {
+    const { data } = await api.post("/auth/register", { name, email, password, role });
+    localStorage.setItem("qa_user", JSON.stringify(data));
+    setUser(data);
+    return data;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

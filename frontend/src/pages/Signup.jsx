@@ -2,21 +2,22 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
-export default function Login() {
+export default function Signup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      await login(email, password);
+      await register(name, email, password);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || "Registration failed");
     }
   };
 
@@ -30,13 +31,21 @@ export default function Login() {
           QA AI Agent
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Sign in to your QA dashboard
+          Create your account
         </p>
         {error && (
           <p className="text-sm text-red-500 bg-red-50 rounded-lg px-3 py-2">
             {error}
           </p>
         )}
+        <input
+          type="text"
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+          required
+        />
         <input
           type="email"
           placeholder="Email"
@@ -57,12 +66,12 @@ export default function Login() {
           type="submit"
           className="w-full bg-brand-600 hover:bg-brand-700 text-white rounded-lg py-2 text-sm font-medium transition"
         >
-          Sign in
+          Sign up
         </button>
         <p className="text-xs text-center text-gray-500 dark:text-gray-400 pt-2">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-brand-600 dark:text-brand-400 hover:underline">
-            Sign up
+          Already have an account?{" "}
+          <Link to="/login" className="text-brand-600 dark:text-brand-400 hover:underline">
+            Sign in
           </Link>
         </p>
       </form>

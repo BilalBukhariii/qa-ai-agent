@@ -3,6 +3,7 @@ import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import RequirementAnalyzer from "./pages/RequirementAnalyzer.jsx";
 import TestCaseGenerator from "./pages/TestCaseGenerator.jsx";
+import Signup from "./pages/Signup.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 
 function PrivateRoute({ children }) {
@@ -14,6 +15,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       <Route
         path="/dashboard"
         element={
