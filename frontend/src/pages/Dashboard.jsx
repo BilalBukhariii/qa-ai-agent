@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api.js";
-import { useAuth } from "../context/AuthContext.jsx";
+import Layout from "../components/Layout.jsx";
 
 function StatCard({ label, value, accent }) {
   return (
@@ -14,7 +14,6 @@ function StatCard({ label, value, accent }) {
 export default function Dashboard() {
   const [testCases, setTestCases] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user, logout } = useAuth();
 
   useEffect(() => {
     api
@@ -29,21 +28,10 @@ export default function Dashboard() {
   const pending = testCases.filter((t) => t.status === "not_run").length;
 
   return (
-    <div className="min-h-screen p-6 md:p-10">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-            QA Dashboard
-          </h1>
-          <p className="text-sm text-gray-500">Welcome back, {user?.name}</p>
-        </div>
-        <button
-          onClick={logout}
-          className="text-sm text-gray-500 hover:text-red-500"
-        >
-          Sign out
-        </button>
-      </div>
+    <Layout>
+      <h1 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+        QA Dashboard
+      </h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <StatCard label="Total Test Cases" value={testCases.length} accent="text-gray-900 dark:text-white" />
@@ -86,6 +74,6 @@ export default function Dashboard() {
           </tbody>
         </table>
       </div>
-    </div>
+    </Layout>
   );
 }

@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import RequirementAnalyzer from "./pages/RequirementAnalyzer.jsx";
+import TestCaseGenerator from "./pages/TestCaseGenerator.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 
 function PrivateRoute({ children }) {
@@ -17,6 +19,22 @@ export default function App() {
         element={
           <PrivateRoute>
             <Dashboard />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/requirement-analyzer"
+        element={
+          <PrivateRoute>
+            <RequirementAnalyzer />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/test-case-generator"
+        element={
+          <PrivateRoute>
+            <TestCaseGenerator />
           </PrivateRoute>
         }
       />

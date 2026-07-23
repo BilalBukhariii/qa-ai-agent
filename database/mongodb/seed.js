@@ -1,15 +1,23 @@
 // Run with: node database/mongodb/seed.js
 // Populates a local MongoDB with sample tickets and test cases.
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import mongoose from "../../backend/node_modules/mongoose/index.js";
+import dotenv from "../../backend/node_modules/dotenv/lib/main.js";
 import Ticket from "../../backend/models/Ticket.js";
 import TestCase from "../../backend/models/TestCase.js";
 import User from "../../backend/models/User.js";
 
-dotenv.config({ path: "../../.env" });
+dotenv.config({ path: "../../backend/.env" });
 
 const run = async () => {
-  await mongoose.connect(process.env.MONGO_URI);
+  const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/qa_ai_agent";
+  try {
+    await mongoose.connect(uri, { serverSelectionTimeoutMS: 3000 });
+  } catch (err) {
+    console.warn(`Primary connection failed (${err.message}). Seeding on MongoMemoryServer fallback...`);
+    const { MongoMemoryServer } = await import("mongodb-memory-server");
+    const mongoServer = await MongoMemoryServer.create();
+    await mongoose.connect(mongoServer.getUri(), { dbName: "qa_ai_agent" });
+  }
 
   const admin = await User.findOneAndUpdate(
     { email: "admin@example.com" },
