@@ -4,6 +4,9 @@ import Dashboard from "./pages/Dashboard.jsx";
 import RequirementAnalyzer from "./pages/RequirementAnalyzer.jsx";
 import TestCaseGenerator from "./pages/TestCaseGenerator.jsx";
 import TestCases from "./pages/TestCases.jsx";
+import AutomationAgent from "./pages/AutomationAgent.jsx";
+import DatabaseAgent from "./pages/DatabaseAgent.jsx";
+import AIChatPanel from "./pages/AIChatPanel.jsx";
 import Signup from "./pages/Signup.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 
@@ -30,6 +33,30 @@ export default function App() {
         element={
           <PrivateRoute>
             <TestCases />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/automation-agent"
+        element={
+          <PrivateRoute>
+            <AutomationAgent />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/database-agent"
+        element={
+          <PrivateRoute>
+            <DatabaseAgent />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/ai-chat"
+        element={
+          <PrivateRoute>
+            <AIChatPanel />
           </PrivateRoute>
         }
       />

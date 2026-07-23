@@ -6,10 +6,12 @@ import {
   FileSearch,
   Sparkles,
   TestTube2,
+  Cpu,
+  Database,
+  MessageSquare,
   Sun,
   Moon,
   LogOut,
-  UserCheck,
   ShieldCheck
 } from "lucide-react";
 
@@ -18,6 +20,9 @@ const links = [
   { to: "/test-cases", label: "Test Cases", icon: TestTube2 },
   { to: "/requirement-analyzer", label: "Requirement Analyzer", icon: FileSearch },
   { to: "/test-case-generator", label: "AI Test Generator", icon: Sparkles },
+  { to: "/automation-agent", label: "Automation Agent", icon: Cpu },
+  { to: "/database-agent", label: "DB Query Agent", icon: Database },
+  { to: "/ai-chat", label: "AI Copilot Chat", icon: MessageSquare },
 ];
 
 export default function Layout({ children }) {

@@ -1,9 +1,18 @@
-import { callAIForJSON } from "../ai/aiProvider.js";
+import { callAI, callAIForJSON } from "../ai/aiProvider.js";
 import {
   REQUIREMENT_ANALYZER_SYSTEM,
   buildRequirementAnalyzerPrompt,
   TEST_CASE_GENERATOR_SYSTEM,
   buildTestCaseGeneratorPrompt,
+  AUTOMATION_CODE_SYSTEM,
+  buildAutomationCodePrompt,
+  DATABASE_QUERY_SYSTEM,
+  buildDatabaseQueryPrompt,
+  API_TEST_SYSTEM,
+  buildApiTestPrompt,
+  CHAT_AI_SYSTEM,
+  BUG_WRITER_SYSTEM,
+  buildBugReportPrompt,
 } from "../ai/prompts.js";
 import TestCase from "../models/TestCase.js";
 
@@ -60,6 +69,73 @@ export const generateTestCases = async (req, res, next) => {
     }
 
     res.json(withTicket);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route POST /api/ai/generate-automation
+export const generateAutomationCode = async (req, res, next) => {
+  try {
+    const { requirement, framework, language } = req.body;
+    const result = await callAIForJSON(
+      AUTOMATION_CODE_SYSTEM,
+      buildAutomationCodePrompt(requirement, framework, language)
+    );
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route POST /api/ai/generate-database
+export const generateDatabaseQueries = async (req, res, next) => {
+  try {
+    const { requirement } = req.body;
+    const result = await callAIForJSON(
+      DATABASE_QUERY_SYSTEM,
+      buildDatabaseQueryPrompt(requirement)
+    );
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route POST /api/ai/generate-api-tests
+export const generateApiTests = async (req, res, next) => {
+  try {
+    const { requirement } = req.body;
+    const result = await callAIForJSON(
+      API_TEST_SYSTEM,
+      buildApiTestPrompt(requirement)
+    );
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route POST /api/ai/chat
+export const chatWithAI = async (req, res, next) => {
+  try {
+    const { message } = req.body;
+    const reply = await callAI(CHAT_AI_SYSTEM, message);
+    res.json({ reply });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route POST /api/ai/generate-bug
+export const generateBugReport = async (req, res, next) => {
+  try {
+    const { description } = req.body;
+    const bug = await callAIForJSON(
+      BUG_WRITER_SYSTEM,
+      buildBugReportPrompt(description)
+    );
+    res.json(bug);
   } catch (error) {
     next(error);
   }
