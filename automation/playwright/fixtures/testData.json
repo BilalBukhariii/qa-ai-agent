@@ -1,0 +1,11 @@
+{
+  "users": {
+    "validQA": { "email": "qa.lead@example.com", "password": "Passw0rd!" },
+    "invalidUser": { "email": "nouser@example.com", "password": "wrong" }
+  },
+  "sampleTicket": {
+    "title": "Login page throws 500 on empty password",
+    "priority": "high",
+    "type": "bug"
+  }
+}
