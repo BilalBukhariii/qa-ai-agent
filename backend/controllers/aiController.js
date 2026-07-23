@@ -75,12 +75,17 @@ export const generateTestCases = async (req, res, next) => {
 };
 
 // @route POST /api/ai/generate-automation
+// body: { requirement: string, framework?: string, language?: string, appDetails?: object }
 export const generateAutomationCode = async (req, res, next) => {
   try {
-    const { requirement, framework, language } = req.body;
+    const { requirement, framework, language, appDetails } = req.body;
+    if (!requirement || requirement.trim().length < 10) {
+      res.status(400);
+      throw new Error("Please provide a requirement of at least 10 characters");
+    }
     const result = await callAIForJSON(
       AUTOMATION_CODE_SYSTEM,
-      buildAutomationCodePrompt(requirement, framework, language)
+      buildAutomationCodePrompt(requirement, framework, language, appDetails)
     );
     res.json(result);
   } catch (error) {
