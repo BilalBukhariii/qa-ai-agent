@@ -3,6 +3,7 @@ import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import RequirementAnalyzer from "./pages/RequirementAnalyzer.jsx";
 import TestCaseGenerator from "./pages/TestCaseGenerator.jsx";
+import TestCases from "./pages/TestCases.jsx";
 import Signup from "./pages/Signup.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 
@@ -21,6 +22,14 @@ export default function App() {
         element={
           <PrivateRoute>
             <Dashboard />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/test-cases"
+        element={
+          <PrivateRoute>
+            <TestCases />
           </PrivateRoute>
         }
       />
